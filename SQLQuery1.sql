@@ -1,6 +1,5 @@
 USE [HM]
 
--- Please replace the values with your actual data
 INSERT INTO Faculties (Id, Name) VALUES (1, 'Faculty1');
 INSERT INTO Departments (Id, Financing, Name, FacultyId) VALUES (1, 10000, 'Department1', 1);
 INSERT INTO Groups (Id, Name, Year, DepartmentId) VALUES (1, 'Group1', 1, 1);
