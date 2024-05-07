@@ -10,7 +10,7 @@ CREATE TABLE Faculties (
 
 CREATE TABLE Departments (
     Id INT PRIMARY KEY,
-    Financing MONEY NOT NULL,
+    Financing MONEY NOT NULL DEFAULT 0 CHECK (Financing >= 0),
     Name NVARCHAR(100) NOT NULL,
     FacultyId INT,
     FOREIGN KEY (FacultyId) REFERENCES Faculties(Id)
@@ -19,9 +19,16 @@ CREATE TABLE Departments (
 CREATE TABLE Groups (
     Id INT PRIMARY KEY,
     Name NVARCHAR(10) NOT NULL,
-    Year INT NOT NULL,
+    Year INT CHECK (Year BETWEEN 1 AND 5),
     DepartmentId INT,
     FOREIGN KEY (DepartmentId) REFERENCES Departments(Id)
+);
+
+CREATE TABLE Teachers (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL,
+    Salary MONEY NOT NULL CHECK (Salary > 0),
+    Surname NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE Subjects (
@@ -29,16 +36,9 @@ CREATE TABLE Subjects (
     Name NVARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Teachers (
-    Id INT PRIMARY KEY,
-    Name NVARCHAR(MAX) NOT NULL,
-    Salary MONEY NOT NULL,
-    Surname NVARCHAR(MAX) NOT NULL
-);
-
 CREATE TABLE Lectures (
     Id INT PRIMARY KEY,
-    DayOfWeek INT NOT NULL,
+    DayOfWeek INT CHECK (DayOfWeek BETWEEN 1 AND 7),
     LectureRoom NVARCHAR(MAX) NOT NULL,
     SubjectId INT,
     TeacherId INT,
