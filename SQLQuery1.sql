@@ -1,39 +1,23 @@
 USE [HM]
 
--- Запит 1
-SELECT COUNT(*) AS TeacherCount
-FROM Teachers
-WHERE Id IN (
-    SELECT TeacherId
-    FROM Lectures
-    WHERE Id IN (
-        SELECT LectureId
-        FROM GroupsLectures
-        WHERE GroupId IN (
-            SELECT Id
-            FROM Groups
-            WHERE DepartmentId IN (
-                SELECT Id
-                FROM Departments
-                WHERE Name = 'Software Development'
+-- Query 1: Count of teachers in the "Software Development" department
+SELECT COUNT(*) FROM Teachers WHERE Id IN (
+    SELECT TeacherId FROM Lectures WHERE Id IN (
+        SELECT LectureId FROM GroupsLectures WHERE GroupId IN (
+            SELECT Id FROM Groups WHERE DepartmentId IN (
+                SELECT Id FROM Departments WHERE Name = 'Software Development'
             )
         )
     )
 );
 
--- Запит 2
-SELECT COUNT(*) AS LectureCount
-FROM Lectures
-WHERE TeacherId = (
-    SELECT Id
-    FROM Teachers
-    WHERE Name = 'Dave' AND Surname = 'McQueen'
+-- Query 2: Count of lectures given by "Dave McQueen"
+SELECT COUNT(*) FROM Lectures WHERE TeacherId = (
+    SELECT Id FROM Teachers WHERE Name = 'Dave McQueen'
 );
 
--- Запит 3
-SELECT COUNT(*) AS LectureCount
-FROM Lectures
-WHERE LectureRoom = 'D201';
+-- Query 3: Count of lectures in room "D201"
+SELECT COUNT(*) FROM Lectures WHERE LectureRoom = 'D201';
 
 -- Запит 4
 SELECT LectureRoom, COUNT(*) AS LectureCount
@@ -91,25 +75,18 @@ SELECT AVG(Financing) AS AverageFinancing
 FROM Departments;
 
 -- Запит 9
-SELECT Name, Surname, COUNT(*) AS SubjectCount
-FROM Teachers
-JOIN Lectures ON Teachers.Id = Lectures.TeacherId
-JOIN Subjects ON Lectures.SubjectId = Subjects.Id
-GROUP BY Name, Surname;
-
--- Запит 10
 SELECT DayOfWeek, COUNT(*) AS LectureCount
 FROM Lectures
 GROUP BY DayOfWeek;
 
--- Запит 11
+-- Запит 10
 SELECT LectureRoom, COUNT(DISTINCT DepartmentId) AS DepartmentCount
 FROM Lectures
 JOIN GroupsLectures ON Lectures.Id = GroupsLectures.LectureId
 JOIN Groups ON GroupsLectures.GroupId = Groups.Id
 GROUP BY LectureRoom;
 
--- Запит 12
+-- Запит 11
 SELECT Faculties.Name, COUNT(DISTINCT Subjects.Id) AS SubjectCount
 FROM Faculties
 JOIN Departments ON Faculties.Id = Departments.FacultyId
@@ -119,7 +96,7 @@ JOIN Lectures ON GroupsLectures.LectureId = Lectures.Id
 JOIN Subjects ON Lectures.SubjectId = Subjects.Id
 GROUP BY Faculties.Name;
 
--- Запит 13
+-- Запит 12
 SELECT TeacherId, LectureRoom, COUNT(*) AS LectureCount
 FROM Lectures
 GROUP BY TeacherId, LectureRoom;
